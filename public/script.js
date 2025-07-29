@@ -121,27 +121,35 @@ window.addEventListener('DOMContentLoaded', () => {
       console.error('Failed to fetch greeting:', err);
     });
 });
-function populateVoiceList() {
-  const voiceSelect = document.getElementById('voiceSelect');
-  const voices = speechSynthesis.getVoices();
+let voiceActive = false;
+let recognition;
+let synth = window.speechSynthesis;
+let selectedVoice = null;
 
-  voiceSelect.innerHTML = '';
-  voices.forEach((voice, index) => {
+window.speechSynthesis.onvoiceschanged = populateVoices;
+
+function populateVoices() {
+  const voices = synth.getVoices();
+  const select = document.getElementById('voiceSelect');
+  select.innerHTML = '';
+
+  voices.forEach((voice, i) => {
     const option = document.createElement('option');
-    option.value = index;
+    option.value = voice.name;
     option.textContent = `${voice.name} (${voice.lang})`;
-    voiceSelect.appendChild(option);
+    if (voice.name === 'Google US English') option.selected = true;
+    select.appendChild(option);
   });
 
-  // Update selectedVoice when changed
-  voiceSelect.onchange = () => {
-    selectedVoice = voices[voiceSelect.value];
-  };
+  selectedVoice = voices.find(v => v.name === select.value);
 
-  // Set default voice
-  if (voices.length > 0) {
-    voiceSelect.selectedIndex = 0;
-    selectedVoice = voices[0];
-  }
+  select.onchange = () => {
+    selectedVoice = voices.find(v => v.name === select.value);
+  };
 }
 
+function speak(text) {
+  const utterance = new SpeechSynthesisUtterance(text);
+  if (selectedVoice) utterance.voice = selectedVoice;
+  synth.speak(utterance);
+}
