@@ -1,11 +1,6 @@
 let voiceActive = false;
 let recognition;
-let selectedVoice = null;
 let synth = window.speechSynthesis;
-speechSynthesis.onvoiceschanged = populateVoiceList;
-populateVoiceList(); // in case voices are already available
-
-
 
 function toggleContainer(event) {
   const container = document.getElementById('agentforce-container');
@@ -104,9 +99,20 @@ function appendMessage(iconUrl, text) {
 
 function speak(text) {
   const utterance = new SpeechSynthesisUtterance(text);
-  if (selectedVoice) utterance.voice = selectedVoice;
+
+  // Try to select Google US English voice
+  const voices = synth.getVoices();
+  const googleVoice = voices.find(v => v.name === 'Google US English');
+
+  if (googleVoice) {
+    utterance.voice = googleVoice;
+  } else if (voices.length > 0) {
+    utterance.voice = voices[0]; // fallback to first available voice
+  }
+
   synth.speak(utterance);
 }
+
 // Fetch and display the initial greeting on load
 window.addEventListener('DOMContentLoaded', () => {
   fetch('/greeting')
@@ -121,50 +127,3 @@ window.addEventListener('DOMContentLoaded', () => {
       console.error('Failed to fetch greeting:', err);
     });
 });
-let voiceActive = false;
-let recognition;
-let synth = window.speechSynthesis;
-let selectedVoice = null;
-
-window.speechSynthesis.onvoiceschanged = populateVoices;
-
-function populateVoices() {
-  const voices = synth.getVoices();
-  const voiceSelect = document.getElementById('voiceSelect');
-  voiceSelect.innerHTML = '';
-
-  voices.forEach((voice) => {
-    const option = document.createElement('option');
-    option.textContent = `${voice.name} (${voice.lang})`;
-    option.value = voice.name;
-
-    if (voice.name === 'Google US English') {
-      option.selected = true;
-      selectedVoice = voice;
-    }
-
-    voiceSelect.appendChild(option);
-  });
-
-  if (!selectedVoice && voices.length > 0) {
-    selectedVoice = voices[0];
-  }
-
-  voiceSelect.addEventListener('change', () => {
-    selectedVoice = voices.find(v => v.name === voiceSelect.value);
-  });
-}
-
-if (synth.onvoiceschanged !== undefined) {
-  synth.onvoiceschanged = populateVoices;
-} else {
-  populateVoices();
-}
-
-
-function speak(text) {
-  const utterance = new SpeechSynthesisUtterance(text);
-  if (selectedVoice) utterance.voice = selectedVoice;
-  synth.speak(utterance);
-}
-
