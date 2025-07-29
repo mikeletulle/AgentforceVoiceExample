@@ -1,6 +1,11 @@
 let voiceActive = false;
 let recognition;
+let selectedVoice = null;
 let synth = window.speechSynthesis;
+speechSynthesis.onvoiceschanged = populateVoiceList;
+populateVoiceList(); // in case voices are already available
+
+
 
 function toggleContainer(event) {
   const container = document.getElementById('agentforce-container');
@@ -99,6 +104,7 @@ function appendMessage(iconUrl, text) {
 
 function speak(text) {
   const utterance = new SpeechSynthesisUtterance(text);
+  if (selectedVoice) utterance.voice = selectedVoice;
   synth.speak(utterance);
 }
 // Fetch and display the initial greeting on load
@@ -115,3 +121,27 @@ window.addEventListener('DOMContentLoaded', () => {
       console.error('Failed to fetch greeting:', err);
     });
 });
+function populateVoiceList() {
+  const voiceSelect = document.getElementById('voiceSelect');
+  const voices = speechSynthesis.getVoices();
+
+  voiceSelect.innerHTML = '';
+  voices.forEach((voice, index) => {
+    const option = document.createElement('option');
+    option.value = index;
+    option.textContent = `${voice.name} (${voice.lang})`;
+    voiceSelect.appendChild(option);
+  });
+
+  // Update selectedVoice when changed
+  voiceSelect.onchange = () => {
+    selectedVoice = voices[voiceSelect.value];
+  };
+
+  // Set default voice
+  if (voices.length > 0) {
+    voiceSelect.selectedIndex = 0;
+    selectedVoice = voices[0];
+  }
+}
+

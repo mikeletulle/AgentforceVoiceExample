@@ -104,3 +104,9 @@ button {
   height: 20px;
   margin-right: 8px;
 }
+#voiceSelect {
+  width: 100%;
+  margin-bottom: 5px;
+  padding: 6px;
+  font-size: 14px;
+}
