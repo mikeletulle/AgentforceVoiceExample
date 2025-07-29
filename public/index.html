@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Agentforce Voice Bot</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="agentforce-container" class="expanded" onclick="handleContainerClick(event)">
+    <button class="minimize-button" onclick="toggleContainer(event)">🗕</button>
+    <div id="conversation" class="scrolling-conversation"></div>
+    <input id="messageInput" type="text" placeholder="Type your message..." />
+    <div class="button-row">
+      <button onclick="sendMessage()">Send</button>
+      <button id="talkButton" onclick="toggleVoice()">🎤 Talk</button>
+    </div>
+    <div id="loadingIndicator" class="hidden">⏳ Thinking...</div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

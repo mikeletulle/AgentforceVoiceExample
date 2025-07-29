@@ -1,0 +1,106 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: url('/images/background.png') no-repeat center center fixed;
+  background-size: cover;
+}
+
+#agentforce-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #f4f6f9;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  padding: 10px;
+  width: 300px;
+  height: 450px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+#agentforce-container.collapsed {
+  width: 100px;
+  height: 100px;
+  background: url('/images/agent.png') no-repeat center center;
+  background-size: contain;
+  padding: 0;
+  cursor: pointer;
+  overflow: hidden;
+  display: block;
+}
+
+#agentforce-container.collapsed * {
+  display: none;
+}
+
+.minimize-button {
+  align-self: flex-end;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 5px;
+}
+
+#conversation {
+  flex: 1;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 5px;
+  margin-bottom: 10px;
+  background-color: white;
+}
+
+input[type="text"] {
+  padding: 8px;
+  font-size: 14px;
+  margin-bottom: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.button-row {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+button {
+  padding: 6px 12px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#talkButton.active {
+  background-color: #0070d2;
+  color: white;
+}
+
+.hidden {
+  display: none;
+}
+
+#loadingIndicator {
+  text-align: center;
+  margin-top: 5px;
+  font-size: 14px;
+  color: #555;
+}
+
+.message {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.message img {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
