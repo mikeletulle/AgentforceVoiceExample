@@ -21,8 +21,17 @@ function toggleVoice() {
   voiceActive = !voiceActive;
   const talkBtn = document.getElementById('talkButton');
   talkBtn.classList.toggle('active', voiceActive);
-  if (voiceActive) startVoice();
+
+  if (voiceActive) {
+    startVoice();
+  } else {
+    if (recognition) {
+      recognition.onend = null;  // prevent it from restarting
+      recognition.stop();
+    }
+  }
 }
+
 
 function startVoice() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
