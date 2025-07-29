@@ -45,10 +45,11 @@ function startVoice() {
   recognition.interimResults = false;
 
   recognition.onresult = function(event) {
-    const transcript = event.results[0][0].transcript;
-    document.getElementById('messageInput').value = transcript;
-    sendMessage();
-  };
+  const transcript = event.results[0][0].transcript.trim();
+  if (!transcript || transcript.length < 2) return;
+  document.getElementById('messageInput').value = transcript;
+  sendMessage();
+};
 
   recognition.onend = () => {
     if (voiceActive) recognition.start();

@@ -92,7 +92,12 @@ app.get('/greeting', (req, res) => {
 // Handle incoming messages and forward to the agent API
 app.post('/send', async (req, res) => {
     try {
-        const userMessage = req.body.message;
+        const userMessage = (req.body.message || '').trim();
+        if (!userMessage) {
+            console.warn('⚠️ Ignored empty or whitespace-only message.');
+            return res.status(400).json({ error: 'Empty message not allowed' });
+        }
+
 
         const response = await axios.post(
             `${process.env.AGENT_API_BASE}/sessions/${sessionId}/messages`,
