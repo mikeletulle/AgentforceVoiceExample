@@ -130,26 +130,41 @@ window.speechSynthesis.onvoiceschanged = populateVoices;
 
 function populateVoices() {
   const voices = synth.getVoices();
-  const select = document.getElementById('voiceSelect');
-  select.innerHTML = '';
+  const voiceSelect = document.getElementById('voiceSelect');
+  voiceSelect.innerHTML = '';
 
-  voices.forEach((voice, i) => {
+  voices.forEach((voice) => {
     const option = document.createElement('option');
-    option.value = voice.name;
     option.textContent = `${voice.name} (${voice.lang})`;
-    if (voice.name === 'Google US English') option.selected = true;
-    select.appendChild(option);
+    option.value = voice.name;
+
+    if (voice.name === 'Google US English') {
+      option.selected = true;
+      selectedVoice = voice;
+    }
+
+    voiceSelect.appendChild(option);
   });
 
-  selectedVoice = voices.find(v => v.name === select.value);
+  if (!selectedVoice && voices.length > 0) {
+    selectedVoice = voices[0];
+  }
 
-  select.onchange = () => {
-    selectedVoice = voices.find(v => v.name === select.value);
-  };
+  voiceSelect.addEventListener('change', () => {
+    selectedVoice = voices.find(v => v.name === voiceSelect.value);
+  });
 }
+
+if (synth.onvoiceschanged !== undefined) {
+  synth.onvoiceschanged = populateVoices;
+} else {
+  populateVoices();
+}
+
 
 function speak(text) {
   const utterance = new SpeechSynthesisUtterance(text);
   if (selectedVoice) utterance.voice = selectedVoice;
   synth.speak(utterance);
 }
+
