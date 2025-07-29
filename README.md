@@ -43,7 +43,9 @@ Then start the server:
 npm start
 Visit http://localhost:3000 in your browser.
 
-### 3. Deploy to Heroku
+
+### 3. Deploying to Heroku
+
 You can deploy to Heroku using:
 
 
