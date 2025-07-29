@@ -96,6 +96,8 @@ app.post('/send', async (req, res) => {
         if (!userMessage) {
             console.warn('⚠️ Ignored empty or whitespace-only message.');
             return res.status(400).json({ error: 'Empty message not allowed' });
+        }else{
+            console.log('💬 User message:', userMessage);
         }
 
 
