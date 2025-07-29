@@ -120,8 +120,23 @@ function speak(text) {
     utterance.voice = voices[0]; // fallback to first available voice
   }
 
+  // 🔇 Pause recognition to avoid echo
+  if (recognition && voiceActive) {
+    recognition.onend = null; // prevent auto-restart
+    recognition.stop();
+  }
+
+  // 🔊 Speak the response
   synth.speak(utterance);
+
+  // 🔁 Restart recognition after speaking finishes
+  utterance.onend = () => {
+    if (voiceActive && recognition) {
+      recognition.start();
+    }
+  };
 }
+
 
 // Fetch and display the initial greeting on load
 window.addEventListener('DOMContentLoaded', () => {
